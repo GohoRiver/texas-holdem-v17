@@ -1631,12 +1631,18 @@ function applyFullState(state){
   G.community = normalizeCards(state.community);
   G.handNumber = state.handNumber;
   G.smallBlind = state.smallBlind; G.bigBlind = state.bigBlind;
-  G.gameOver = state.gameOver || false;
+    G.gameOver = state.gameOver || false;
   const gh = $("gameHandLabel");
   if(gh) gh.textContent = t("handShortLabel", { n:G.handNumber });
   syncCountdownFromState(state);
   render();
-  const meIdx = G.online.mySeat;
+
+  /* ★ 新增：牌局结束（进入 showdown 或下一手倒计时）时，所有弃牌玩家都能拿到秀牌按钮 */
+  if((G.stage === 'showdown' || (state.nextHandEndsAt && state.nextHandEndsAt > Date.now())) && !G.gameOver){
+    offerShowCards();
+  }
+
+  const meIdx = G.online.mySeat; 
   if(meIdx >= 0 && G.currentPlayerIndex === meIdx && !G.gameOver && G.stage !== 'showdown'){
     const me = G.players[meIdx];
     if(me && me.seated !== false && !me.folded && !me.allIn){
@@ -2477,11 +2483,8 @@ function showTieDisplay(){
   setTimeout(function(){ el.classList.add('hidden'); }, 3500);
 }
 
-/* ★ 秀牌：仅联机时房主可秀；AI 场人人可秀 */
+/* ★ 秀牌：所有玩家（含联机非房主）都可秀 */
 function offerShowCards(){
-  /* 联机模式：只有房主能秀 */
-  if(G.online.active && !G.online.isHost) return;
-
   const me = G.players[myIndex()];
   if(!me) return;
   if(!me.folded) return;
