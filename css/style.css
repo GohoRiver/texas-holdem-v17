@@ -2120,3 +2120,121 @@ body.is-desktop .mobile-log-panel{ display:none !important; }
 }
 
 .overlay-card-wide{ max-width: 520px; }
+
+/* ====================================================================
+   ★★★ 筹码堆归位：取消所有"浮到外侧"，放回座位内部
+   （此段放最末尾，覆盖上面所有浮动规则）
+   ==================================================================== */
+
+/* 所有平台、所有座位：筹码堆位置归零 */
+body.is-desktop .seat .chip-stack-wrap,
+body.is-desktop .seat.me .chip-stack-wrap,
+body.is-desktop .seat[data-chip-side] .chip-stack-wrap,
+
+body.is-mobile .seat .chip-stack-wrap,
+body.is-mobile .seat.me .chip-stack-wrap,
+body.is-mobile.orientation-portrait .seat .chip-stack-wrap,
+body.is-mobile.orientation-portrait .seat.me .chip-stack-wrap,
+body.is-mobile.orientation-portrait .seat[data-chip-side] .chip-stack-wrap,
+
+body.is-mobile.orientation-landscape #gameScreen .seat .chip-stack-wrap,
+body.is-mobile.orientation-landscape #gameScreen .seat.me .chip-stack-wrap,
+body.is-mobile.orientation-landscape #gameScreen .seat[data-chip-side] .chip-stack-wrap,
+body.is-mobile.orientation-landscape #gameScreen .seat[data-chip-side="self"] .chip-stack-wrap,
+body.is-mobile.orientation-landscape #gameScreen .seat[data-pid="0"] .chip-stack-wrap,
+
+body.is-mobile.orientation-landscape #gameScreen .seat[data-chip-side="right"] .chip-stack-wrap,
+body.is-mobile.orientation-landscape #gameScreen .seat[data-chip-side="left"] .chip-stack-wrap,
+body.is-mobile.orientation-landscape #gameScreen .seat[data-chip-side="top"] .chip-stack-wrap,
+body.is-mobile.orientation-landscape #gameScreen .seat[data-chip-side="bottom"] .chip-stack-wrap,
+
+body.is-desktop .seat[data-chip-side="right"] .chip-stack-wrap,
+body.is-desktop .seat[data-chip-side="left"] .chip-stack-wrap,
+body.is-desktop .seat[data-chip-side="top"] .chip-stack-wrap,
+body.is-desktop .seat[data-chip-side="bottom"] .chip-stack-wrap{
+  /* 取消绝对定位，回到文档流 */
+  position: static !important;
+  top: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+
+  /* 布局：水平居中放在座位内容下方 */
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: flex-end !important;
+  gap: 2px !important;
+  margin: 3px auto 2px auto !important;
+  padding: 0 !important;
+
+  /* 去掉浮动时的背景框 */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  /* 尺寸 */
+  max-width: 100% !important;
+  width: auto !important;
+  height: auto !important;
+
+  /* 层级 */
+  z-index: auto !important;
+  white-space: normal !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+}
+
+/* 桌面端筹码片尺寸（保持原有大小） */
+body.is-desktop .seat .chip-column,
+body.is-mobile.orientation-portrait .seat .chip-column{
+  width: 16px !important;
+}
+body.is-desktop .seat .chip-piece,
+body.is-mobile.orientation-portrait .seat .chip-piece{
+  width: 16px !important;
+  height: 4px !important;
+  margin-top: -1.2px !important;
+}
+body.is-desktop .seat .chip-label,
+body.is-mobile.orientation-portrait .seat .chip-label{
+  font-size: 8px !important;
+  bottom: -10px !important;
+}
+
+/* 手机横屏筹码片尺寸（保持原有大小） */
+body.is-mobile.orientation-landscape #gameScreen .seat .chip-column{
+  width: 9px !important;
+}
+body.is-mobile.orientation-landscape #gameScreen .seat .chip-piece{
+  width: 9px !important;
+  height: 3px !important;
+  margin-top: -0.5px !important;
+  border-width: 0.5px !important;
+  border-radius: 50% !important;
+}
+body.is-mobile.orientation-landscape #gameScreen .seat .chip-label{
+  font-size: 6px !important;
+  bottom: -8px !important;
+  color: #fbbf24 !important;
+  letter-spacing: -0.3px !important;
+  text-shadow: 0 0 2px #000 !important;
+}
+
+/* 空筹码堆隐藏 */
+body .seat .chip-stack-wrap.empty{
+  display: none !important;
+}
+
+/* 底池筹码也归位到 table-center 内部（可选，看是否需要） */
+/* 如果底池筹码显示有问题，取消下面这段注释 */
+/*
+body.is-mobile.orientation-landscape #gameScreen .pot-chips{
+  position: static !important;
+  margin: 6px auto 0 !important;
+  right: auto !important;
+  top: auto !important;
+  transform: none !important;
+}
+*/
